@@ -87,24 +87,24 @@ annotations_to_sf <- function(p, feature=c("box","cam","ray", "ves"), col=NULL, 
       poly <- do.call(rbind,
                       lapply(p@content[[1]]@content[[selector[i]]]@d@segments,
                              function(x) cbind(x@x, x@y)))
-      P1 <- Polygon(poly)
-      out_list[[i]] <- Polygons(list(P1), ID=paste(feature, i))
+      P1 <- sp::Polygon(poly)
+      out_list[[i]] <- sp::Polygons(list(P1), ID=paste(feature, i))
     }
-    out_sf <- st_as_sf(SpatialPolygons(out_list))
-    out_sf <- st_buffer(out_sf, 0)
+    out_sf <- sf::st_as_sf(sp::SpatialPolygons(out_list))
+    out_sf <- sf::st_buffer(out_sf, 0)
   } else {
     for(i in 1:length(selector)){
       line <- do.call(rbind,
                       lapply(p@content[[1]]@content[[selector[i]]]@d@segments,
                              function(x) cbind(x@x, x@y)))
-      R1 <- Line(line)
-      out_list[[i]] <- Lines(list(R1), ID=paste(feature, i))
+      R1 <- sp::Line(line)
+      out_list[[i]] <- sp::Lines(list(R1), ID=paste(feature, i))
     }
-    out_sf <- st_as_sf(SpatialLines(out_list))
+    out_sf <- sf::st_as_sf(sp::SpatialLines(out_list))
   }
   out_sf$geometry <- out_sf$geometry * r
   if(feature=="ves"){
-    out_sf$area <- st_area(out_sf$geometry)
+    out_sf$area <- sf::st_area(out_sf$geometry)
   }
   return(out_sf)
 }
@@ -134,7 +134,7 @@ cam_dist <- function(csf=cam_sf,
   nv <- length(pts[[1]])
   ray_nearest <- st_nearest_points(pts, rsf)
   ### Select which ray is closest for each vessel
-  ray_selector <- tapply(st_length(ray_nearest),
+  ray_selector <- tapply(sf::st_length(ray_nearest),
                          rep(1:nv, each=nr),
                          function(x) which(x==min(x)))
   ### Select the shortest line to nearest ray
