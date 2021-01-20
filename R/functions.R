@@ -82,6 +82,11 @@ annotations_to_sf <- function(p,
                               feature=c("box","cam","ray", "ves"),
                               col=NULL,
                               r=0.4424){
+  if(feature=="box" & is.null(col)) col <- c("#44330BFF","#00FF00FF")
+  if(feature=="cam" & is.null(col)) col <- "#00FFFFFF"
+  if(feature=="ray" & is.null(col)) col <- "#FF00FFFF"
+  if(feature=="ves" & is.null(col)) col <- "#FFFF00FF"
+  if(is.null(col)) {warning('color not specified')}
   selector <- which(unlist(lapply(p@content[[1]]@content, function(x) x@gp$col)) %in% col)
   out_list <- list()
   # selector <- get(paste0(feature,"_sel"))
