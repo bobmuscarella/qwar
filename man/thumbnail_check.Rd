@@ -4,14 +4,7 @@
 \alias{thumbnail_check}
 \title{Create a thumbnail image if annotations}
 \usage{
-thumbnail_check(
-  outfile = NULL,
-  bsf = box_sf,
-  csf = cam_sf,
-  rsf = ray_sf,
-  vsf = ves_sf,
-  vstat = "area"
-)
+thumbnail_check(outfile = NULL, bsf, csf, rsf, vsf, vstat = "area")
 }
 \arguments{
 \item{outfile}{Character name of output file (end in .pdf), optionally including the path.}
