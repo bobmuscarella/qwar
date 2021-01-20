@@ -480,7 +480,7 @@ ves_fraction_pt_sample <- function(bsf, csf, rsf, vsf,
   message(paste("Generating", npts, "random points..."))
   x <- st_as_sf(st_sample(bsf, npts))
   nr <- length(rsf$geometry)
-  x$dist <- cam_dist(csf, rsf, pts=x)
+  x$dist <- cam_dist(csf, rsf, vsf)
   bins <- seq(0, max(x$dist)+1, binsize)
   lower <- bins[-length(bins)]
   upper <- bins[-1]
