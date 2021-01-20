@@ -1,0 +1,26 @@
+Package: qwar
+Title: Quantitive Wood Anatomy in R
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Robert",
+           family = "Muscarella",
+           role = c("aut", "cre"),
+           email = "bob.muscarella@gmail.com",
+           comment = c(ORCID = "0000-0003-3039-1076"))
+Description: Perform analysis of quantitive wood anatomy based on anotated SVG files.
+License: `use_mit_license()`
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+	grImport2,
+	rsvg,
+	sp,
+	sf,
+	lwgeom,
+	spdep,
+	progress,
+	moments,
+	doParallel,
+	parallel
