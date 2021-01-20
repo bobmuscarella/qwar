@@ -78,7 +78,10 @@ feature_numbers <- function(p,
 #' @param r Size (in micrometers) of each pixel.
 #' @return A `sf` object with the annotated features.
 #' @export
-annotations_to_sf <- function(p, feature=c("box","cam","ray", "ves"), col=NULL, r=0.4424){
+annotations_to_sf <- function(p,
+                              feature=c("box","cam","ray", "ves"),
+                              col=NULL,
+                              r=0.4424){
   selector <- which(unlist(lapply(p@content[[1]]@content, function(x) x@gp$col)) %in% col)
   out_list <- list()
   # selector <- get(paste0(feature,"_sel"))
@@ -124,12 +127,12 @@ annotations_to_sf <- function(p, feature=c("box","cam","ray", "ves"), col=NULL, 
 #' @return A vector of distances (in microns) from each feature to the
 #' cambium line, along the closest ray.
 #' @export
-cam_dist <- function(csf=cam_sf,
-                     rsf=ray_sf,
-                     pts=ves_centroids,
+cam_dist <- function(csf,
+                     rsf,
+                     vsf,
                      parallel=F,
                      cores=detectCores(logical=FALSE)){
-
+  pts <- st_centroid(vsf)
   nr <- length(ray_sf$geometry)
   nv <- length(pts[[1]])
   ray_nearest <- st_nearest_points(pts, rsf)
