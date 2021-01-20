@@ -133,7 +133,7 @@ cam_dist <- function(csf,
                      parallel=F,
                      cores=detectCores(logical=FALSE)){
   pts <- st_centroid(vsf)
-  nr <- length(ray_sf$geometry)
+  nr <- length(rsf$geometry)
   nv <- length(pts[[1]])
   ray_nearest <- st_nearest_points(pts, rsf)
   ### Select which ray is closest for each vessel
