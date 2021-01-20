@@ -159,7 +159,7 @@ cam_dist <- function(csf,
     pb <- progress_bar$new(total = nv)
     for(i in 1:nv){
       pb$tick()
-      focray <- ray_sf[ray_selector[i],]
+      focray <- rsf[ray_selector[i],]
       raypoly <- ray_nearest_polys[i,]
       campoly <- cam_nearest_polys[i,]
       rs_tmp <- st_collection_extract(lwgeom::st_split(focray, raypoly), "LINESTRING")
@@ -479,7 +479,7 @@ ves_fraction_pt_sample <- function(bsf, csf, rsf, vsf,
                                    binsize=200){
   message(paste("Generating", npts, "random points..."))
   x <- st_as_sf(st_sample(bsf, npts))
-  nr <- length(ray_sf$geometry)
+  nr <- length(rsf$geometry)
   x$dist <- cam_dist(csf, rsf, pts=x)
   bins <- seq(0, max(x$dist)+1, binsize)
   lower <- bins[-length(bins)]
