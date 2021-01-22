@@ -438,7 +438,7 @@ ves_group_indices <- function(vsf,
 #' Get characteristics of vessels by binned distance from cambium.
 #' @param vsf `sf` object of vessel polygons
 #' @param binsize Size of distance bins to away from cambium.
-#' @return A data.frame with grouping indices for vessels included in each distance bin.
+#' @return A data.frame with characteristics of vessels included in each distance bin.
 #' Includes vessel grouping indices, mean and median vessel area, kurtosis, skewness,
 #' hydraulically-weighted diameter (Dh), total theoretical conductivity (Kh_total),
 #' and mean theoretical conductivity (Kh_mean).
@@ -493,7 +493,7 @@ ves_fraction_pt_sample <- function(bsf,
   message(paste("Generating", npts, "random points..."))
   x <- st_as_sf(st_sample(bsf, npts))
   nr <- length(rsf$geometry)
-  x$dist <- cam_dist(csf, rsf, vsf)
+  x$dist <- cam_dist(csf, rsf, x)
   bins <- seq(0, max(x$dist)+1, binsize)
   lower <- bins[-length(bins)]
   upper <- bins[-1]

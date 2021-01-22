@@ -12,7 +12,7 @@ ves_characteristics_bin(vsf, binsize = 200, diam = "Dcircle")
 \item{binsize}{Size of distance bins to away from cambium.}
 }
 \value{
-A data.frame with grouping indices for vessels included in each distance bin.
+A data.frame with characteristics of vessels included in each distance bin.
 Includes vessel grouping indices, mean and median vessel area, kurtosis, skewness,
 hydraulically-weighted diameter (Dh), total theoretical conductivity (Kh_total),
 and mean theoretical conductivity (Kh_mean).
