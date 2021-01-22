@@ -494,8 +494,11 @@ ves_fraction_pt_sample <- function(bsf,
   x <- st_as_sf(st_sample(bsf, npts))
   nr <- length(rsf$geometry)
   x$dist <- cam_dist(csf, rsf, x)
-  bins <- seq(0, max(x$dist) + binsize, binsize)
+  # bins <- seq(0, max(x$dist) + binsize, binsize)
   # bins <- seq(0, max(x$dist)+1, binsize)
+  # lower <- bins[-length(bins)]
+  # upper <- bins[-1]
+  bins <- seq(0, max(vsf$dist)+binsize, binsize)
   lower <- bins[-length(bins)]
   upper <- bins[-1]
   outmat <- matrix(nrow=length(bins)-1, ncol=6)
