@@ -4,7 +4,7 @@
 \alias{ves_group_indices}
 \title{Vessel Grouping Index}
 \usage{
-ves_group_indices(vsf, thresh)
+ves_group_indices(vsf, thresh = 33.26)
 }
 \arguments{
 \item{vsf}{\code{sf} object of vessel polygons}
