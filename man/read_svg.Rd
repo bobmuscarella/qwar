@@ -8,8 +8,6 @@ read_svg(svgfile)
 }
 \arguments{
 \item{svgfile}{Character string name of the input file (ending in .svg)}
-
-\item{svgpath}{Character string path to the input file}
 }
 \value{
 An object of class \code{Picture} from the \code{grImport2} package.

@@ -6,7 +6,6 @@
 #' It can take a minute or so, depending on the file size.
 #'
 #' @param svgfile Character string name of the input file (ending in .svg)
-#' @param svgpath Character string path to the input file
 #' @return An object of class `Picture` from the `grImport2` package.
 #' @export
 read_svg <- function(svgfile){
