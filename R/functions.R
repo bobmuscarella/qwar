@@ -309,7 +309,7 @@ ves_diam_circle <- function(vsf=ves_sf){
 
 
 
-#' Vessel diameter based no median radius
+#' Vessel diameter based on median radius
 #'
 #' Compute the diameter of vessels based on the median radius from
 #' the centroid to vessel polygon edge.
