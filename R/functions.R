@@ -444,7 +444,8 @@ ves_group_indices <- function(vsf,
 #' and mean theoretical conductivity (Kh_mean).
 #' @export
 ves_characteristics_bin <- function(vsf,
-                                    binsize=200){
+                                    binsize=200,
+                                    diam='Dcircle'){
   bins <- seq(0, max(vsf$dist)+binsize, binsize)
   lower <- bins[-length(bins)]
   upper <- bins[-1]
@@ -460,7 +461,7 @@ ves_characteristics_bin <- function(vsf,
     outmat[i,8] <- median(focves$area)
     outmat[i,9] <- moments::kurtosis(focves$area)
     outmat[i,10] <- moments::skewness(focves$area)
-    outmat[i,11] <- (sum(focves$diam^4)/length(focves))^(0.25)
+    outmat[i,11] <- (sum(as.data.frame(focves)[,diam]^4)/length(focves))^(0.25)
     outmat[i,12] <- sum((pi * ((focves$Dmedrad/1000)^4))/(128 * (1.002e-9)))
     outmat[i,13] <- mean((pi * ((focves$Dmedrad/1000)^4))/(128 * (1.002e-9)))
   }

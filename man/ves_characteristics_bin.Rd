@@ -4,7 +4,7 @@
 \alias{ves_characteristics_bin}
 \title{Distance bins of vessel characteristics}
 \usage{
-ves_characteristics_bin(vsf, binsize = 200)
+ves_characteristics_bin(vsf, binsize = 200, diam = "Dcircle")
 }
 \arguments{
 \item{vsf}{\code{sf} object of vessel polygons}
