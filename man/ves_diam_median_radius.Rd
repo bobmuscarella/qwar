@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{ves_diam_median_radius}
 \alias{ves_diam_median_radius}
-\title{Vessel diameter based no median radius}
+\title{Vessel diameter based on median radius}
 \usage{
 ves_diam_median_radius(
   vsf = ves_sf,
