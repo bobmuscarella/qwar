@@ -396,7 +396,7 @@ group_size <- function(vsf,
 #' @return A data.frame with grouping indices for vessels included in the sample.
 #' @export
 ves_group_indices <- function(vsf,
-                              thresh){
+                              thresh=33.26){
   if(length(vsf$geometry) > 1){
     ves.nb <- spdep::poly2nb(vsf$geometry, snap=(thresh))
     if(class(vsf)[1]=="sfc_GEOMETRY"){
