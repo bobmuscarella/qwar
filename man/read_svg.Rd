@@ -4,7 +4,7 @@
 \alias{read_svg}
 \title{Load an annotated SVG file}
 \usage{
-read_svg(svgfile, svgpath)
+read_svg(svgfile)
 }
 \arguments{
 \item{svgfile}{Character string name of the input file (ending in .svg)}
