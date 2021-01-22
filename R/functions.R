@@ -223,7 +223,10 @@ cam_dist <- function(csf,
 #' @return Saves a PDF file showing the output annotations.
 #' @export
 thumbnail_check <- function(outfile=NULL,
-                            bsf, csf, rsf, vsf,
+                            bsf,
+                            csf,
+                            rsf,
+                            vsf,
                             vstat='area'){
   pdf(outfile)
   plot(bsf$geometry, axes=T, lwd=2,
@@ -252,7 +255,7 @@ thumbnail_check <- function(outfile=NULL,
 #' @param cores Number of cores to use for parallel processing.
 #' @return A vector of maximum diameter (in microns) for each vessel.
 #' @export
-ves_max_diam <- function(vsf=ves_sf,
+ves_max_diam <- function(vsf,
                          parallel=TRUE,
                          cores=detectCores(logical=FALSE)){
   vc <- st_centroid(vsf$geometry)
@@ -300,7 +303,7 @@ ves_max_diam <- function(vsf=ves_sf,
 #' @param vsf `sf` object of vessel polygons
 #' @return A vector of cirular diameter (in microns) for each vessel.
 #' @export
-ves_diam_circle <- function(vsf=ves_sf){
+ves_diam_circle <- function(vsf){
   message(paste("Computing idealized vessel diameter as: 2 * sqrt(area)"))
   D <- 2 * (sqrt(vsf$area/pi))
   return(D)
@@ -320,7 +323,7 @@ ves_diam_circle <- function(vsf=ves_sf){
 #' @param cores Number of cores to use for parallel processing.
 #' @return A vector of diameter (in microns) for each vessel.
 #' @export
-ves_diam_median_radius <- function(vsf=ves_sf,
+ves_diam_median_radius <- function(vsf,
                                    parallel=TRUE,
                                    cores=detectCores(logical=FALSE)){
   vc <- st_centroid(vsf$geometry)
@@ -371,7 +374,8 @@ ves_diam_median_radius <- function(vsf=ves_sf,
 #' @param thresh Distance threshold (in microns) to idenfity grouped vessels.
 #' @return A vector of group size for each vessel.
 #' @export
-group_size <- function(vsf, thresh=33.26){
+group_size <- function(vsf,
+                       thresh=33.26){
   ves.nb <- spdep::poly2nb(vsf, snap=thresh)
   gs <- card(spdep::nblag_cumul(spdep::nblag(ves.nb, 30)))+1
   return(gs)
@@ -439,7 +443,8 @@ ves_group_indices <- function(vsf,
 #' hydraulically-weighted diameter (Dh), total theoretical conductivity (Kh_total),
 #' and mean theoretical conductivity (Kh_mean).
 #' @export
-ves_characteristics_bin <- function(vsf, binsize=200){
+ves_characteristics_bin <- function(vsf,
+                                    binsize=200){
   bins <- seq(0, max(vsf$dist)+binsize, binsize)
   lower <- bins[-length(bins)]
   upper <- bins[-1]
@@ -478,7 +483,10 @@ ves_characteristics_bin <- function(vsf, binsize=200){
 #' @param binsize Size of distance bins to away from cambium
 #' @return A data.frame with the number of random sample points included in each bin, the number of vessels in each bin, the vessel fraction in each bin, the mean vessel area in each bin, and the vessel density in each bin.
 #' @export
-ves_fraction_pt_sample <- function(bsf, csf, rsf, vsf,
+ves_fraction_pt_sample <- function(bsf,
+                                   csf,
+                                   rsf,
+                                   vsf,
                                    npts=100000,
                                    binsize=200){
   message(paste("Generating", npts, "random points..."))

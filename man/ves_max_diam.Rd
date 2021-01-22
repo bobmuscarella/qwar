@@ -4,11 +4,7 @@
 \alias{ves_max_diam}
 \title{Maximum vessel diameter}
 \usage{
-ves_max_diam(
-  vsf = ves_sf,
-  parallel = TRUE,
-  cores = detectCores(logical = FALSE)
-)
+ves_max_diam(vsf, parallel = TRUE, cores = detectCores(logical = FALSE))
 }
 \arguments{
 \item{vsf}{\code{sf} object of vessel polygons}

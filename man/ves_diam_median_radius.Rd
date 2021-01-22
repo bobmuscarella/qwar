@@ -5,7 +5,7 @@
 \title{Vessel diameter based on median radius}
 \usage{
 ves_diam_median_radius(
-  vsf = ves_sf,
+  vsf,
   parallel = TRUE,
   cores = detectCores(logical = FALSE)
 )
