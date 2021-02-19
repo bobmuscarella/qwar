@@ -4,7 +4,15 @@
 \alias{ves_fraction_pt_sample}
 \title{Fractional area of vessels}
 \usage{
-ves_fraction_pt_sample(bsf, csf, rsf, vsf, npts = 1e+05, binsize = 200)
+ves_fraction_pt_sample(
+  bsf,
+  csf,
+  rsf,
+  vsf,
+  npts = 1e+05,
+  binsize = 200,
+  SaveRandomPts = T
+)
 }
 \arguments{
 \item{bsf}{\code{sf} object of bounding box}
@@ -18,9 +26,11 @@ ves_fraction_pt_sample(bsf, csf, rsf, vsf, npts = 1e+05, binsize = 200)
 \item{npts}{Number of random points to use for sampling}
 
 \item{binsize}{Size of distance bins to away from cambium}
+
+\item{SaveRandomPts}{Logical as to whether the random points (with distance to cambium) should be provided as output.  In this case, the output is a list (see \code{Value}).}
 }
 \value{
-A data.frame with the number of random sample points included in each bin, the number of vessels in each bin, the vessel fraction in each bin, the mean vessel area in each bin, and the vessel density in each bin.
+If \code{SaveRandomPts==T}, a list where the first element is a data.frame with the number of random sample points included in each bin, the number of vessels in each bin, the vessel fraction in each bin, the mean vessel area in each bin, and the vessel density in each bin and the second element is an sf-object of random points with the attribute of distance to cambium (computed along rays). If \code{SaveRandomPts==F}, a data.frame as described above.
 }
 \description{
 Get fractional area of vessels in distance bins away from cambium based on point sampling.

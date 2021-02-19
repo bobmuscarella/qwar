@@ -482,14 +482,16 @@ ves_characteristics_bin <- function(vsf,
 #' @param vsf `sf` object of vessel polygons
 #' @param npts Number of random points to use for sampling
 #' @param binsize Size of distance bins to away from cambium
-#' @return A data.frame with the number of random sample points included in each bin, the number of vessels in each bin, the vessel fraction in each bin, the mean vessel area in each bin, and the vessel density in each bin.
+#' @param SaveRandomPts Logical as to whether the random points (with distance to cambium) should be provided as output.  In this case, the output is a list (see `Value`).
+#' @return If `SaveRandomPts==T`, a list where the first element is a data.frame with the number of random sample points included in each bin, the number of vessels in each bin, the vessel fraction in each bin, the mean vessel area in each bin, and the vessel density in each bin and the second element is an sf-object of random points with the attribute of distance to cambium (computed along rays). If `SaveRandomPts==F`, a data.frame as described above.
 #' @export
 ves_fraction_pt_sample <- function(bsf,
                                    csf,
                                    rsf,
                                    vsf,
                                    npts=100000,
-                                   binsize=200){
+                                   binsize=200,
+                                   SaveRandomPts=T){
   message(paste("Generating", npts, "random points..."))
   x <- st_as_sf(st_sample(bsf, npts))
   nr <- length(rsf$geometry)
@@ -527,5 +529,10 @@ ves_fraction_pt_sample <- function(bsf,
     }
   }
   colnames(outmat) <- c("dist", "N_pts", "N_ves","ves_fraction","mean_ves_area","ves_density")
-  return(as.data.frame(outmat))
+
+  if(SaveRandomPts){
+    return(list(results=outmat, randpts=x))
+  }else{
+    return(as.data.frame(outmat))
+  }
 }
