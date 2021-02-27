@@ -7,13 +7,14 @@ Authors@R:
            role = c("aut", "cre"),
            email = "bob.muscarella@gmail.com",
            comment = c(ORCID = "0000-0003-3039-1076"))
-Description: Perform analysis of quantitive wood anatomy based on anotated SVG files.
+Description: Perform analysis of quantitive wood anatomy based on annotated SVG files.
 License: `use_mit_license()`
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Depends: 
+	doFuture,
 	grImport2,
 	rsvg,
 	sp,
@@ -21,6 +22,7 @@ Depends:
 	lwgeom,
 	spdep,
 	progress,
+	progressr,
 	moments,
 	doParallel,
 	parallel
