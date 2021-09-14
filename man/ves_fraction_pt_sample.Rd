@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{ves_fraction_pt_sample}
 \alias{ves_fraction_pt_sample}
-\title{Fractional area of vessels}
+\title{Fractional area of vessels in bins of core samples}
 \usage{
 ves_fraction_pt_sample(
   bsf,

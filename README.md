@@ -9,3 +9,15 @@ The `qwar` package uses as input annotations of microscopic images in the form o
 - Computing all parameters in bins of a given distance from the cambium (for time-series analyses)
 
 Future functionality will include other parameters as well models to evaluate changes in QWA parameters in a sample.
+
+Install the package from Github like this:
+```{r}
+require(devtools)
+devtools::install_github("bobmuscarella/qwar")
+library(qwar)
+```
+
+
+## News
+- v 0.0.2: Added and edited functionality to deal with whole branch samples (with polygons defining outer cambium and pith)
+- v 0.0.1: Initial release.

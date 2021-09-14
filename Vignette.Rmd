@@ -1,0 +1,79 @@
+---
+title: "Using the qwar package"
+author: "Bob Muscarella"
+date: "9/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installing the package
+The `qwar` package (for quantitative wood anatomy in R) can be installed from Github using the following commands.
+
+```{r load package, eval=F, message=F}
+library(devtools)
+install_github("bobmuscarella/qwar")
+library(qwar)
+```
+
+```{r load, echo=F, results='hide', message=F}
+library(qwar)
+```
+
+## Loading annotated SVG files
+The `qwar` package reads .svg vector image files (annotated in QuPath) and converts these to simple features (spatial objects) for downstream analyses.
+
+```{r load svg}
+# Read an example .svg file (change path and file name accordingly)
+p <- read_svg("data/LFDP_83_ALCLAT_3_opt-Scene-2-ScanRegion1.svg")
+
+# Convert the .svg file to simple features (sf)
+vsf <- annotations_to_sf(p, "ves") # A set of polygons for the vessels
+psf <- annotations_to_sf(p, "pith") # A polygon delineating the pith 
+csf <- annotations_to_sf(p, "box") # A polygon delineating the outer cambium
+
+plot(csf)
+plot(psf, add=T)
+plot(vsf, add=T)
+```
+
+## Quantifying anatomical properties
+There are many different anatomical parameters that can be derived.  Here is a demonstration.
+
+```{r, message=FALSE}
+# Compute the proportion of the cross section that is pith
+pith_prop <- st_area(psf)/st_area(csf)
+pith_prop
+
+# Compute vessel diameter as diameter of a circle with same area as the vessel (i.e., = 2 * sqrt(area))
+vsf$Dcircle <- ves_diam_circle(vsf)
+
+# Compute the group size that each vessel belongs to (solitary vessels = 1)
+# There is a default threshold based on vessel double wall thickness measured for some Puerto Rican trees but this should ideally be empirically determined.
+vsf$group_size <- group_size(vsf)
+
+# Compute other vessel characteristics (see ?ves_characteristics)
+vchar <- ves_characteristics(vsf)
+
+# Compute vessel fraction (specific for branch samples)
+vfrac <- ves_fraction_pt_sample_branch(csf,
+                                       psf,
+                                       vsf,
+                                       npts=10000, # more points (100000) is better but takes longer
+                                       SaveRandomPts=T)
+
+# See the main results from the vessel fraction function
+vfrac$results
+
+# The vessel fraction function also (optionally) saves the random points, which may be useful
+vfrac$randpts
+
+```
+
+# Working with `sf` objects (simple features)
+
+Familiarizing yourself with the `sf` package will enable you to do more with the annotations.  Check the package website for lots of resources:
+[https://r-spatial.github.io/sf/](https://r-spatial.github.io/sf/)
+

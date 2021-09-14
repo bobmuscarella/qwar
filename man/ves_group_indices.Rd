@@ -9,7 +9,7 @@ ves_group_indices(vsf, thresh = 33.26)
 \arguments{
 \item{vsf}{\code{sf} object of vessel polygons}
 
-\item{thresh}{Distance threshold (in microns) to identify grouped vessels.}
+\item{thresh}{Distance threshold (in microns) to identify grouped vessels. Ideally should be empirically determined as the vessel double wall thickness. Default value is based on ~600 measurements for a set of 10 tree species from the Luquillo Experimental Forest in Puerto Rico.}
 }
 \value{
 A data.frame with grouping indices for vessels included in the sample.

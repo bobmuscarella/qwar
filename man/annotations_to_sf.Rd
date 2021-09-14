@@ -6,7 +6,7 @@
 \usage{
 annotations_to_sf(
   p,
-  feature = c("box", "cam", "ray", "ves"),
+  feature = c("box", "cam", "ray", "ves", "pith"),
   col = NULL,
   r = 0.4424
 )
@@ -20,7 +20,8 @@ annotations_to_sf(
 box=c("#44330BFF","#00FF00FF"),
 cam="#00FFFFFF",
 ray="#FF00FFFF",
-and ves="#FFFF00FF".}
+ves="#FFFF00FF",
+pith="#543D89FF"}
 
 \item{r}{Size (in micrometers) of each pixel.}
 }

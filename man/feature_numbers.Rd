@@ -9,7 +9,8 @@ feature_numbers(
   box_col = c("#44330BFF", "#00FF00FF"),
   cam_col = "#00FFFFFF",
   ray_col = "#FF00FFFF",
-  ves_col = "#FFFF00FF"
+  ves_col = "#FFFF00FF",
+  pith_col = "#543D89FF"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ feature_numbers(
 \item{ray_col}{hexcode color used for the ray lines}
 
 \item{ves_col}{hexcode color used for the vessels}
+
+\item{pith_col}{hexcode color used for the pith polygon}
 }
 \value{
 A matrix of feature counts.

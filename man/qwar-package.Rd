@@ -6,7 +6,7 @@
 \alias{qwar-package}
 \title{Quantitative wood anatomy analyses in R}
 \description{
-Perform analysis of quantitive wood anatomy based on anotated SVG files.
+Perform analysis of quantitive wood anatomy based on annotated SVG files.
 }
 \details{
 

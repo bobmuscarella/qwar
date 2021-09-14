@@ -4,7 +4,7 @@
 \alias{thumbnail_check}
 \title{Create a thumbnail image if annotations}
 \usage{
-thumbnail_check(outfile = NULL, bsf, csf, rsf, vsf, vstat = "area")
+thumbnail_check(outfile = NULL, bsf, csf, rsf, vsf, psf, vstat = "area")
 }
 \arguments{
 \item{outfile}{Character name of output file (end in .pdf), optionally including the path.}
@@ -16,6 +16,8 @@ thumbnail_check(outfile = NULL, bsf, csf, rsf, vsf, vstat = "area")
 \item{rsf}{\code{sf} object of ray line(s)}
 
 \item{vsf}{\code{sf} object of vessel polygons}
+
+\item{psf}{\code{sf} object of pith polygon}
 
 \item{vstat}{Attribute from vessel polygons to use in plotting.}
 }

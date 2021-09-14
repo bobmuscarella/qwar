@@ -3,7 +3,7 @@
 #' Load an annotated SVG file
 #'
 #' This function loads an annotated SVG file, output from QuPath.
-#' It can take a minute or so, depending on the file size.
+#' It can take a minute or perhaps longer, depending on the file size.
 #'
 #' @param svgfile Character string name of the input file (ending in .svg)
 #' @return An object of class `Picture` from the `grImport2` package.
@@ -42,20 +42,23 @@ colorID <- function(p){
 #' @param cam_col hexcode color used for the cambium line
 #' @param ray_col hexcode color used for the ray lines
 #' @param ves_col hexcode color used for the vessels
+#' @param pith_col hexcode color used for the pith polygon
 #' @return A matrix of feature counts.
 #' @export
 feature_numbers <- function(p,
                             box_col=c("#44330BFF","#00FF00FF"),
                             cam_col="#00FFFFFF",
                             ray_col="#FF00FFFF",
-                            ves_col="#FFFF00FF"){
+                            ves_col="#FFFF00FF",
+                            pith_col="#543D89FF"){
   ftab <- data.frame(table(unlist(lapply(p@content[[1]]@content, function(x) x@gp$col))))
   fdf <- rbind(ftab[which(ftab$Var1 %in% box_col),],
                ftab[which(ftab$Var1 %in% cam_col),],
                ftab[which(ftab$Var1 %in% ray_col),],
-               ftab[which(ftab$Var1 %in% ves_col),])
+               ftab[which(ftab$Var1 %in% ves_col),],
+               ftab[which(ftab$Var1 %in% pith_col),])
   colnames(fdf) <- c("Color","Number")
-  rownames(fdf) <- c("Bounding box","Cambium line(s)","Ray line(s)","Vessels")
+  rownames(fdf) <- c("Bounding box","Cambium line(s)","Ray line(s)","Vessels","Pith")
   print(fdf)
 }
 
@@ -73,23 +76,25 @@ feature_numbers <- function(p,
 #' box=c("#44330BFF","#00FF00FF"),
 #' cam="#00FFFFFF",
 #' ray="#FF00FFFF",
-#' and ves="#FFFF00FF".
+#' ves="#FFFF00FF",
+#' pith="#543D89FF"
 #' @param r Size (in micrometers) of each pixel.
 #' @return A `sf` object with the annotated features.
 #' @export
 annotations_to_sf <- function(p,
-                              feature=c("box","cam","ray", "ves"),
+                              feature=c("box","cam","ray", "ves","pith"),
                               col=NULL,
                               r=0.4424){
   if(feature=="box" & is.null(col)) col <- c("#44330BFF","#00FF00FF")
   if(feature=="cam" & is.null(col)) col <- "#00FFFFFF"
   if(feature=="ray" & is.null(col)) col <- "#FF00FFFF"
   if(feature=="ves" & is.null(col)) col <- "#FFFF00FF"
+  if(feature=="pith" & is.null(col)) col <- "#543D89FF"
   if(is.null(col)) {warning('color not specified')}
   selector <- which(unlist(lapply(p@content[[1]]@content, function(x) x@gp$col)) %in% col)
   out_list <- list()
   # selector <- get(paste0(feature,"_sel"))
-  if(feature %in% c("box","ves")){
+  if(feature %in% c("box","ves","pith")){
     for(i in 1:length(selector)){
       poly <- do.call(rbind,
                       lapply(p@content[[1]]@content[[selector[i]]]@d@segments,
@@ -219,6 +224,7 @@ cam_dist <- function(csf,
 #' @param csf `sf` object of cambium line
 #' @param rsf `sf` object of ray line(s)
 #' @param vsf `sf` object of vessel polygons
+#' @param psf `sf` object of pith polygon
 #' @param vstat Attribute from vessel polygons to use in plotting.
 #' @return Saves a PDF file showing the output annotations.
 #' @export
@@ -227,12 +233,14 @@ thumbnail_check <- function(outfile=NULL,
                             csf,
                             rsf,
                             vsf,
+                            psf,
                             vstat='area'){
   pdf(outfile)
   plot(bsf$geometry, axes=T, lwd=2,
        main=outfile)
   plot(csf$geometry, col=3, lwd=3, add=T)
   plot(rsf$geometry, col=2, lwd=3, add=T)
+  plot(psf$geometry, col=4, lwd=3, add=T)
   if(is.null(vstat)){
     plot(vsf$geometry, add=T, lwd=0.25, col='yellow')
   } else {
@@ -392,7 +400,7 @@ group_size <- function(vsf,
 #' subsets of the `vsf` to, for example, examine changes in grouping index in
 #' different parts of the sample.
 #' @param vsf `sf` object of vessel polygons
-#' @param thresh Distance threshold (in microns) to identify grouped vessels.
+#' @param thresh Distance threshold (in microns) to identify grouped vessels. Ideally should be empirically determined as the vessel double wall thickness. Default value is based on ~600 measurements for a set of 10 tree species from the Luquillo Experimental Forest in Puerto Rico.
 #' @return A data.frame with grouping indices for vessels included in the sample.
 #' @export
 ves_group_indices <- function(vsf,
@@ -406,16 +414,23 @@ ves_group_indices <- function(vsf,
     }
     # Vessel multiple fraction
     vmf <- (length(unique(unlist(ves.nb)))-1) / nv
+
     # Vessel grouping index
-    tmpvgi <- vector()
-    for(v in 1:max(vsf$group_size)){
-      tmpvgi[v] <- sum(vsf$group_size==v)/v
+    if(is.null(vsf$group_size)){
+      vsf$group_size <- group_size(vsf)
     }
+    tmpvgi <- vector()
+      for(v in 1:max(vsf$group_size)){
+        tmpvgi[v] <- sum(vsf$group_size==v)/v
+      }
     vgi <- nv/sum(tmpvgi)
+
     # Solitary vessel index
     svi <- sum(vsf$group_size==1)/sum(tmpvgi)
+
     # Mean group size
     mgs <- mean(card(nblag_cumul(nblag(ves.nb, 30)))+1)
+
     # Compile grouping parameters for output
     gi_df <- data.frame(N_ves=nv,
                         ves_mult_frac=vmf,
@@ -471,9 +486,36 @@ ves_characteristics_bin <- function(vsf,
 }
 
 
+#' Vessel characteristics on a whole sample
+#'
+#' Get characteristics of vessels in an entire (unbinned) sample.
+#' @param vsf `sf` object of vessel polygons
+#' @return A data.frame with characteristics of vessels included in each distance bin.
+#' Includes vessel grouping indices, mean and median vessel area, kurtosis, skewness,
+#' hydraulically-weighted diameter (Dh), total theoretical conductivity (Kh_total),
+#' and mean theoretical conductivity (Kh_mean).
+#' @export
+ves_characteristics <- function(vsf,
+                                diam='Dcircle'){
+  res <- vector()
+  vg <- ves_group_indices(vsf)
+  res[1:5] <- unlist(vg)
+  res[6] <- mean(vsf$area)
+  vsf$area <- st_area(vsf)
+  res[7] <- median(vsf$area)
+  res[8] <- moments::kurtosis(vsf$area)
+  res[9] <- moments::skewness(vsf$area)
+  vsf$Dcircle <- ves_diam_circle(vsf)
+  res[10] <- (sum(as.data.frame(vsf)[,diam]^4)/length(vsf))^(0.25)
+  res[11] <- sum((pi * ((vsf$Dcircle/1000)^4))/(128 * (1.002e-9)))
+  res[12] <- mean((pi * ((vsf$Dcircle/1000)^4))/(128 * (1.002e-9)))
+  names(res) <- c(names(vg), "mean_area", "median_area",
+                  "kurtosis", "skewness", "Dh", "Kh_total", "Kh_mean")
+  return(round(res,3))
+}
 
 
-#' Fractional area of vessels
+#' Fractional area of vessels in bins of core samples
 #'
 #' Get fractional area of vessels in distance bins away from cambium based on point sampling.
 #' @param bsf `sf` object of bounding box
@@ -534,5 +576,37 @@ ves_fraction_pt_sample <- function(bsf,
     return(list(results=outmat, randpts=x))
   }else{
     return(as.data.frame(outmat))
+  }
+}
+
+
+
+#' Fractional area of vessels from branch cross-sections
+#'
+#' Get fractional area of vessels in an entire branch cross section based on point sampling.
+#' @param csf `sf` object of bounding polygon (outer cambium)
+#' @param psf `sf` object of pith polygon
+#' @param vsf `sf` object of vessel polygons
+#' @param npts Number of random points to use for sampling
+#' @param SaveRandomPts Logical as to whether the random points should be provided as output.  In this case, the output is a list (see `Value`).
+#' @return If `SaveRandomPts==F`, a data.frame with the vessel fraction and density. If `SaveRandomPts==T`, a list where the first element is a data.frame as described above and the second element is an sf-object of the random points used to compute vessel fraction.
+#' @export
+ves_fraction_pt_sample_branch <- function(csf,
+                                   psf,
+                                   vsf,
+                                   npts=100000,
+                                   SaveRandomPts=T){
+  message(paste("Generating", npts, "random points to compute vessel fraction..."))
+  x <- st_as_sf(st_sample(st_difference(csf, psf), npts))
+  res <- vector()
+  x$ves <- rowSums(st_intersects(x, vsf, sparse=F))
+  res[1] <- mean(x$ves)
+  res[2] <- mean(x$ves) / (mean(vsf$area)/1e6)
+  names(res) <- c("ves_fraction", "ves_density")
+
+  if(SaveRandomPts){
+    return(list(results=res, randpts=x))
+  } else {
+    return(as.data.frame(res))
   }
 }

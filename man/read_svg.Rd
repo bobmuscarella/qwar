@@ -14,5 +14,5 @@ An object of class \code{Picture} from the \code{grImport2} package.
 }
 \description{
 This function loads an annotated SVG file, output from QuPath.
-It can take a minute or so, depending on the file size.
+It can take a minute or perhaps longer, depending on the file size.
 }
