@@ -150,7 +150,8 @@ cam_dist <- function(csf,
                          rep(1:nv, each=nr),
                          function(x) which(x==min(x)))
   ### Select the shortest line to nearest ray
-  ray_nearest2 <- ray_nearest[seq(0, nr*nv, nr)[-(nv+1)]+ray_selector,]
+  # ray_nearest2 <- ray_nearest[seq(0, nr*nv, nr)[-(nv+1)]+ray_selector,]
+  ray_nearest2 <- ray_nearest[seq(0, nr*nv, nr)[-(nv+1)]+ray_selector]
   # Get the point along the ray line
   ray_nearest_pts <- st_cast(ray_nearest2, "POINT")[seq(2, (2*nv), 2)]
   # Make into polygon to slice rayline
@@ -159,7 +160,8 @@ cam_dist <- function(csf,
   cam_nearest <- st_nearest_points(csf, rsf)
   cam_nearest_pts <- st_cast(cam_nearest, "POINT")[seq(1, (2 * nr), 2)]
   cam_nearest_poly <- st_buffer(cam_nearest_pts, 0.25)
-  cam_nearest_polys <- cam_nearest_poly[ray_selector,]
+  # cam_nearest_polys <- cam_nearest_poly[ray_selector,]
+  cam_nearest_polys <- cam_nearest_poly[ray_selector]
   ### Get distances to cambium
 
   if(parallel==F){
@@ -169,8 +171,10 @@ cam_dist <- function(csf,
     for(i in 1:nv){
       pb$tick()
       focray <- rsf[ray_selector[i],]
-      raypoly <- ray_nearest_polys[i,]
-      campoly <- cam_nearest_polys[i,]
+      # raypoly <- ray_nearest_polys[i,]
+      raypoly <- ray_nearest_polys[i]
+      # campoly <- cam_nearest_polys[i,]
+      campoly <- cam_nearest_polys[i]
       rs_tmp <- st_collection_extract(lwgeom::st_split(focray, raypoly), "LINESTRING")
 
       ## New way to do this to avoid problems with little loops in the ray lines

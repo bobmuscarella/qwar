@@ -19,5 +19,6 @@ library(qwar)
 
 
 ## News
+- v 0.0.3: Changed subsetting script in `cam_dist` function because it wasn't giving error - not sure what changed...?
 - v 0.0.2: Added and edited functionality to deal with whole branch samples (with polygons defining outer cambium and pith)
 - v 0.0.1: Initial release.
