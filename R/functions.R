@@ -480,7 +480,7 @@ ves_characteristics_bin <- function(vsf,
     outmat[i,8] <- median(focves$area)
     outmat[i,9] <- moments::kurtosis(focves$area)
     outmat[i,10] <- moments::skewness(focves$area)
-    outmat[i,11] <- (sum(as.data.frame(focves)[,diam]^4)/length(focves))^(0.25)
+    outmat[i,11] <- (sum(as.data.frame(focves)[,diam]^4)/nrow(focves))^(0.25)
     outmat[i,12] <- sum((pi * ((focves$Dmedrad/1000)^4))/(128 * (1.002e-9)))
     outmat[i,13] <- mean((pi * ((focves$Dmedrad/1000)^4))/(128 * (1.002e-9)))
   }
@@ -510,7 +510,7 @@ ves_characteristics <- function(vsf,
   res[8] <- moments::kurtosis(vsf$area)
   res[9] <- moments::skewness(vsf$area)
   vsf$Dcircle <- ves_diam_circle(vsf)
-  res[10] <- (sum(as.data.frame(vsf)[,diam]^4)/length(vsf))^(0.25)
+  res[10] <- (sum(as.data.frame(vsf)[,diam]^4)/nrow(vsf))^(0.25)
   res[11] <- sum((pi * ((vsf$Dcircle/1000)^4))/(128 * (1.002e-9)))
   res[12] <- mean((pi * ((vsf$Dcircle/1000)^4))/(128 * (1.002e-9)))
   names(res) <- c(names(vg), "mean_area", "median_area",
