@@ -614,3 +614,30 @@ ves_fraction_pt_sample_branch <- function(csf,
     return(as.data.frame(res))
   }
 }
+
+
+#' Compute grid spacing for tissue fraction analysis
+#'
+#' Compute grid spacing for tissue fraction analysis.  Based on the area of the sample and a desired minimum number of grid points, this will provide the size of grid spacing.
+#' @param diameter The diameter of the section in microns, measure with a line tool and put length here
+#' @param min_overlaps Define the minimum number of overlapping grid crosses (default is 400)
+#' @return The grid spacing (in microns) to set in QuPath.
+#' @export
+
+grid_spacing <- function(diameter=NULL, min_overlaps=400){
+
+  # Calculate the area of the circle
+  area_circle <- pi * (diameter/2)^2
+  # Calculate the area of each grid square
+  area_square <- area_circle / min_overlaps
+  # Calculate the side length of each grid square
+  side_length <- sqrt(area_square)
+  # Calculate the number of squares that can fit along the diameter
+  squares_along_diameter <- diameter / side_length
+  # Round up to the nearest integer
+  squares_along_diameter <- ceiling(squares_along_diameter)
+  # Calculate the actual spacing of the grid
+  spacing <- diameter / squares_along_diameter
+  # Print the spacing of the grid
+  print(paste("The spacing of the grid is", spacing))
+}
