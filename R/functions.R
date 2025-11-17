@@ -122,6 +122,62 @@ annotations_to_sf <- function(p,
 }
 
 
+#' Convert features to sf objects (updated)
+#'
+#' Convert annotated features from the `Picture` object into `sf` objects
+#' for spatial analyses.
+#'
+#' @param p Picture file output from `read_svg` function
+#' @param feature Type of feature to be converted.
+#' @param col Hexcode color used for the feature. Typically for
+#' box=c("#44330BFF","#00FF00FF"),
+#' cam="#00FFFFFF",
+#' ray="#FF00FFFF",
+#' ves="#FFFF00FF",
+#' pith="#543D89FF"
+#' @param r Size (in micrometers) of each pixel.
+#' @return A `sf` object with the annotated features.
+#' @details This is an updated version of the function that works for later versions of `rsvg` and `grImport2` packages (new way of storing the svg data).
+#' @export
+annotations_to_sf2 <- function (p, feature = c("box", "cam", "ray", "ves", "pith"),
+                                col = NULL, r = 0.4424)
+{
+  if (feature == "box" & is.null(col))
+    col <- c("#44330BFF", "#00FF00FF")
+  if (feature == "cam" & is.null(col))
+    col <- "#00FFFFFF"
+  if (feature == "ray" & is.null(col))
+    col <- "#FF00FFFF"
+  if (feature == "ves" & is.null(col))
+    col <- "#FFFF00FF"
+  if (feature == "pith" & is.null(col))
+    col <- "#543D89FF"
+  if (is.null(col)) {
+    warning("color not specified")
+  }
+  selector <- which(unlist(lapply(p@content, function(x) x@gp$col)) %in% col)
+  out_list <- list()
+  if (feature %in% c("box", "ves", "pith")) {
+    for (i in 1:length(selector)) {
+      poly <- do.call(rbind, lapply(p@content[[selector[i]]]@d@segments,
+                                    function(x) cbind(x@x, x@y)))
+      P1 <- sp::Polygon(poly)
+      out_list[[i]] <- sp::Polygons(list(P1), ID = paste(feature, i))
+    }
+    out_sf <- sf::st_as_sf(sp::SpatialPolygons(out_list))
+    out_sf <- sf::st_buffer(out_sf, 0)
+  }
+  else {
+    warning("Feature not recognized")
+  }
+  out_sf$geometry <- out_sf$geometry * r
+  if (feature == "ves") {
+    out_sf$area <- sf::st_area(out_sf$geometry)
+  }
+  return(out_sf)
+}
+
+
 
 
 #' Measure distance along rays to cambium

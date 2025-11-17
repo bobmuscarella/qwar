@@ -8,9 +8,6 @@
 \description{
 Perform analysis of quantitive wood anatomy based on annotated SVG files.
 }
-\details{
-
-}
 \author{
 \strong{Maintainer}: Robert Muscarella \email{bob.muscarella@gmail.com} (\href{https://orcid.org/0000-0003-3039-1076}{ORCID})
 
