@@ -1,6 +1,6 @@
 Package: qwar
 Title: Quantitive Wood Anatomy in R
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: 
     person(given = "Robert",
            family = "Muscarella",

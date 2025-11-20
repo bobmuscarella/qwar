@@ -8,10 +8,10 @@
 #' @param svgfile Character string name of the input file (ending in .svg)
 #' @return An object of class `Picture` from the `grImport2` package.
 #' @export
-read_svg <- function(svgfile){
-  rsvg::rsvg_svg(svgfile, "tmpout.svg")
-  p <- grImport2::readPicture("tmpout.svg")
-  file.remove("tmpout.svg")
+read_svg <- function(svgfile, tmpfile="tmpout.svg"){
+  rsvg::rsvg_svg(svgfile, tmpfile)
+  p <- grImport2::readPicture(tmpfile)
+  file.remove(tmpfile)
   return(p)
 }
 
