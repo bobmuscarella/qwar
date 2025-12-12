@@ -19,6 +19,7 @@ library(qwar)
 
 
 ## News
+- v 0.0.6: Changed `thumbnail_check` function to allow for missing `bsf` object.
 - v 0.0.5: Changed `read_svg` function to allow different names for temporary svg file.
 - v 0.0.4: Added `annotations_to_sf2` function to deal with new structure of svg file data from the `grImports2` package.
 - v 0.0.3: Changed subsetting script in `cam_dist` function because it wasn't giving error - not sure what changed...?

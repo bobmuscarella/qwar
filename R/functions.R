@@ -289,18 +289,33 @@ cam_dist <- function(csf,
 #' @return Saves a PDF file showing the output annotations.
 #' @export
 thumbnail_check <- function(outfile=NULL,
-                            bsf,
-                            csf,
-                            rsf,
-                            vsf,
-                            psf,
+                            bsf=NULL,
+                            csf=NULL,
+                            rsf=NULL,
+                            vsf=NULL,
+                            psf=NULL,
                             vstat='area'){
   pdf(outfile)
-  plot(bsf$geometry, axes=T, lwd=2,
-       main=outfile)
-  plot(csf$geometry, col=3, lwd=3, add=T)
-  plot(rsf$geometry, col=2, lwd=3, add=T)
-  plot(psf$geometry, col=4, lwd=3, add=T)
+
+  if(!is.null(bsf)){
+    plot(bsf$geometry, axes=T, lwd=2,
+         main=outfile)
+  } else {
+    plot(csf$geometry, border=3, lwd=3, axes=T, main=outfile)
+  }
+
+  if(!is.null(csf)){
+    plot(csf$geometry, col=3, lwd=3, add=T)
+  }
+
+  if(!is.null(rsf)){
+    plot(rsf$geometry, col=2, lwd=3, add=T)
+  }
+
+  if(!is.null(psf)){
+    plot(psf$geometry, col=4, lwd=3, add=T)
+  }
+
   if(is.null(vstat)){
     plot(vsf$geometry, add=T, lwd=0.25, col='yellow')
   } else {
