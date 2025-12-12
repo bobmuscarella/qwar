@@ -305,7 +305,7 @@ thumbnail_check <- function(outfile=NULL,
   }
 
   if(!is.null(csf)){
-    plot(csf$geometry, col=3, lwd=3, add=T)
+    plot(csf$geometry, border=3, lwd=3, add=T)
   }
 
   if(!is.null(rsf)){
