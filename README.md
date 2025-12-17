@@ -27,7 +27,7 @@ library(qwar)
 - v 0.0.1: Initial release.
 
 ## Publications that have used qwar
-- (Ziemińska, K., Bibbo, S., Farrar, S., Thompson, J., Uriarte, M., Ziaco, E., Zimmerman, J. K., & Muscarella, R. (2023). Shifts in wood anatomical traits after a major hurricane. Functional Ecology, 37(12), 3000–3014.)[https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2435.14451]
+- [Ziemińska, K., Bibbo, S., Farrar, S., Thompson, J., Uriarte, M., Ziaco, E., Zimmerman, J. K., & Muscarella, R. (2023). Shifts in wood anatomical traits after a major hurricane. Functional Ecology, 37(12), 3000–3014.](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2435.14451)
 - ...
 
 
