@@ -19,6 +19,7 @@ library(qwar)
 
 
 ## News
+- v 0.0.7: Added `colorID2` function to deal with new structure of svg file data from the `grImports2` package. Added option for no messages (`verbose=F`) during vessel area calculations.
 - v 0.0.6: Changed `thumbnail_check` function to allow for missing `bsf` object.
 - v 0.0.5: Changed `read_svg` function to allow different names for temporary svg file.
 - v 0.0.4: Added `annotations_to_sf2` function to deal with new structure of svg file data from the `grImports2` package.

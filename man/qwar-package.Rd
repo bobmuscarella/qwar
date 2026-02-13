@@ -8,6 +8,9 @@
 \description{
 Perform analysis of quantitive wood anatomy based on annotated SVG files.
 }
+\details{
+R functions for quantitative wood anatomy using annotations as SVG image files (from e.g. QuPath).
+}
 \author{
 \strong{Maintainer}: Robert Muscarella \email{bob.muscarella@gmail.com} (\href{https://orcid.org/0000-0003-3039-1076}{ORCID})
 

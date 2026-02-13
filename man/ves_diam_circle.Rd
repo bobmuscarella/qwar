@@ -4,7 +4,7 @@
 \alias{ves_diam_circle}
 \title{Circle vessel diameter}
 \usage{
-ves_diam_circle(vsf)
+ves_diam_circle(vsf, verbose = F)
 }
 \arguments{
 \item{vsf}{\code{sf} object of vessel polygons}

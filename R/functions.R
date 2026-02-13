@@ -33,6 +33,24 @@ colorID <- function(p){
 }
 
 
+#' Check color codes on annotated SVG file (new SVG version)
+#'
+#' This function gives the colors of various annotated objects in an SVG file
+#' as well as the count of objects in each color.
+#'
+#' @param p Picture file output from `read_svg` function
+#' @return An object of class `Picture` from the `grImport2` package.
+#' @export
+colorID2 <- function (p)
+{
+  colvec <- vector()
+  for (i in 1:length(p@content)) {
+    colvec[i] <- p@content[[i]]@gp$col
+  }
+  return(table(colvec))
+}
+
+
 #' Count feature types
 #'
 #' Gives the number of different feature types in the annotated SVG file based on color codes.
@@ -52,6 +70,36 @@ feature_numbers <- function(p,
                             ves_col="#FFFF00FF",
                             pith_col="#543D89FF"){
   ftab <- data.frame(table(unlist(lapply(p@content[[1]]@content, function(x) x@gp$col))))
+  fdf <- rbind(ftab[which(ftab$Var1 %in% box_col),],
+               ftab[which(ftab$Var1 %in% cam_col),],
+               ftab[which(ftab$Var1 %in% ray_col),],
+               ftab[which(ftab$Var1 %in% ves_col),],
+               ftab[which(ftab$Var1 %in% pith_col),])
+  colnames(fdf) <- c("Color","Number")
+  rownames(fdf) <- c("Bounding box","Cambium line(s)","Ray line(s)","Vessels","Pith")
+  print(fdf)
+}
+
+
+#' Count feature types for new SVG files
+#'
+#' Gives the number of different feature types in the annotated SVG file based on color codes.
+#'
+#' @param p Picture file output from `read_svg` function
+#' @param box_col hexcode color used for the bounding box
+#' @param cam_col hexcode color used for the cambium line
+#' @param ray_col hexcode color used for the ray lines
+#' @param ves_col hexcode color used for the vessels
+#' @param pith_col hexcode color used for the pith polygon
+#' @return A matrix of feature counts.
+#' @export
+feature_numbers2 <- function(p,
+                            box_col=c("#44330BFF","#00FF00FF"),
+                            cam_col="#00FFFFFF",
+                            ray_col="#FF00FFFF",
+                            ves_col="#FFFF00FF",
+                            pith_col="#543D89FF"){
+  ftab <- data.frame(table(unlist(lapply(p@content, function(x) x@gp$col))))
   fdf <- rbind(ftab[which(ftab$Var1 %in% box_col),],
                ftab[which(ftab$Var1 %in% cam_col),],
                ftab[which(ftab$Var1 %in% ray_col),],
@@ -122,7 +170,7 @@ annotations_to_sf <- function(p,
 }
 
 
-#' Convert features to sf objects (updated)
+#' Convert features to sf objects (new SVG files)
 #'
 #' Convert annotated features from the `Picture` object into `sf` objects
 #' for spatial analyses.
@@ -340,10 +388,11 @@ thumbnail_check <- function(outfile=NULL,
 #' @export
 ves_max_diam <- function(vsf,
                          parallel=TRUE,
-                         cores=detectCores(logical=FALSE)){
+                         cores=detectCores(logical=FALSE),
+                         verbose=F){
   vc <- st_centroid(vsf$geometry)
   if(parallel==F){
-    message(paste("Computing max vessel diameter..."))
+    if(verbose==T){message(paste("Computing max vessel diameter..."))}
     ves_diam <- vector()
     pb <- progress_bar$new(total = length(vsf$geometry))
     for(i in 1:length(vsf$geometry)){
@@ -386,8 +435,8 @@ ves_max_diam <- function(vsf,
 #' @param vsf `sf` object of vessel polygons
 #' @return A vector of cirular diameter (in microns) for each vessel.
 #' @export
-ves_diam_circle <- function(vsf){
-  message(paste("Computing idealized vessel diameter as: 2 * sqrt(area)"))
+ves_diam_circle <- function(vsf, verbose=F){
+  if(verbose==T){message(paste("Computing idealized vessel diameter as: 2 * sqrt(area)"))}
   D <- 2 * (sqrt(vsf$area/pi))
   return(D)
 }

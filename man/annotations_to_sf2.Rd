@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{annotations_to_sf2}
 \alias{annotations_to_sf2}
-\title{Convert features to sf objects (updated)}
+\title{Convert features to sf objects (new SVG files)}
 \usage{
 annotations_to_sf2(
   p,
